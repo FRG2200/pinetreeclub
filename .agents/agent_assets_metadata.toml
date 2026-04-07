@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "J2VIjR-bTwI5PrIchU_og"
+uri = "file://pinetreeclub.tar.gz"
+type = "unspecified"
+title = "Pine tree club - プロジェクト全体 (tar.gz)"
