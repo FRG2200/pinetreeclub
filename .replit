@@ -44,5 +44,4 @@ integrations = ["javascript_log_in_with_replit:2.0.0", "javascript_openai_ai_int
 [userenv]
 
 [userenv.shared]
-KIE_API_KEY = "fac08ec990f05fe24a3297bd5e5319b3"
 KIE_API_BASE_URL = "https://api.kie.ai"

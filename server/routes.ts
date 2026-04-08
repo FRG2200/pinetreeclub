@@ -6,6 +6,7 @@ import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { registerImageRoutes } from "./replit_integrations/image";
 import { submitImageGeneration, submitVideoGeneration, waitForResult, downloadAndSaveResult } from "./kie-client";
+import { renderVideoAd, type VideoAdRenderProps } from "./remotion-renderer";
 import fs from "node:fs";
 import path from "node:path";
 import express from "express";
@@ -387,6 +388,31 @@ export async function registerRoutes(
     if (req.params.id === userId) return res.status(400).json({ error: "Cannot delete yourself" });
     await storage.deleteUser(req.params.id);
     res.json({ success: true });
+  });
+
+  // ── Remotion Video Ad Renderer ──
+  const renderAdSchema = z.object({
+    productName: z.string().min(1),
+    headline: z.string().min(1).max(50),
+    tagline: z.string().min(1).max(80),
+    scenes: z.array(z.object({ time: z.string(), caption: z.string(), visual: z.string() })).min(1).max(5),
+    hashtags: z.array(z.string()).min(1).max(8),
+    accentColor: z.string().optional(),
+    productImageUrl: z.string().url().optional().or(z.literal("")),
+    brandName: z.string().optional(),
+  });
+
+  app.post("/api/render-video-ad", isAuthenticated, async (req: any, res) => {
+    try {
+      const props = renderAdSchema.parse(req.body) as VideoAdRenderProps;
+      const outputFile = await renderVideoAd(props);
+      const relativePath = path.relative(path.join(process.cwd(), "uploads"), outputFile);
+      res.json({ success: true, url: `/uploads/${relativePath}` });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Render failed";
+      console.error("[render-video-ad] Error:", message);
+      res.status(500).json({ error: message });
+    }
   });
 
   return httpServer;

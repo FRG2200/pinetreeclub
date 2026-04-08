@@ -58,6 +58,7 @@ const navSections = [
       { title: "Image to Video", href: "/image-to-video", icon: <Clapperboard className="w-4 h-4" /> },
       { title: "Ref Video", href: "/ref-image-to-video", icon: <Film className="w-4 h-4" /> },
       { title: "Transform", href: "/video-to-video", icon: <Video className="w-4 h-4" /> },
+      { title: "Video Ad ✦", href: "/video-ad", icon: <Zap className="w-4 h-4" /> },
     ] as NavItem[]
   },
   {

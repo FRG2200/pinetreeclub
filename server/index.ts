@@ -3,11 +3,15 @@ import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 // stripe-replit-sync is optional (Replit-only feature)
-let runMigrations: ((opts: { databaseUrl: string }) => Promise<void>) | null = null;
-try {
-  const m = await import('stripe-replit-sync');
-  runMigrations = m.runMigrations;
-} catch { /* not available outside Replit */ }
+type MigrationsFunc = (opts: { databaseUrl: string }) => Promise<void>;
+let runMigrations: MigrationsFunc | null = null;
+async function loadStripeReplitSync(): Promise<void> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const m = require('stripe-replit-sync') as { runMigrations: MigrationsFunc };
+    runMigrations = m.runMigrations;
+  } catch { /* not available outside Replit */ }
+}
 import { getStripeSync } from './stripe/stripeClient';
 import { WebhookHandlers } from './stripe/webhookHandlers';
 import { registerStripeRoutes } from './stripe/stripeRoutes';
@@ -24,6 +28,7 @@ declare module "http" {
 }
 
 async function initStripe() {
+  await loadStripeReplitSync();
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     console.warn('DATABASE_URL not set, skipping Stripe init');

@@ -17,6 +17,7 @@ import TextToVideoPage from "@/pages/text-to-video";
 import ImageToVideoPage from "@/pages/image-to-video";
 import RefImageToVideoPage from "@/pages/ref-image-to-video";
 import VideoToVideoPage from "@/pages/video-to-video";
+import VideoAdPage from "@/pages/video-ad";
 import LibraryPage from "@/pages/library";
 import ProfilePage from "@/pages/profile";
 import CreditsTasksPage from "@/pages/credits-tasks";
@@ -72,6 +73,7 @@ function Router() {
         <Route path="/image-to-video" component={ImageToVideoPage} />
         <Route path="/ref-image-to-video" component={RefImageToVideoPage} />
         <Route path="/video-to-video" component={VideoToVideoPage} />
+        <Route path="/video-ad" component={VideoAdPage} />
         <Route path="/library" component={LibraryPage} />
         <Route path="/profile" component={ProfilePage} />
         <Route path="/credits-tasks" component={CreditsTasksPage} />
